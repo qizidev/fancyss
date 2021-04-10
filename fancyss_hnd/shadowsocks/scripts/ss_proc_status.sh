@@ -196,7 +196,7 @@ check_status() {
 		fi
 	fi
 	[ "$ss_dns_china" == "13" ] &&{
-		if [ "$ss_foreign_dns" != "9" ]; then 
+		if [ "$ss_foreign_dns" != "9" ]; then
 			[ -n "$SMD" ] && echo "SmartDNS	工作中	pid：$SMD" || echo "SmartDNS	未运行"
 		fi
 	}
@@ -207,31 +207,31 @@ check_status() {
 	echo
 	echo ③ 检测iptbales工作状态：
 	echo ----------------------------------------------------- nat表 PREROUTING 链 --------------------------------------------------------
-	iptables -nvL PREROUTING -t nat
+	iptables -nvL PREROUTING -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 OUTPUT 链 ------------------------------------------------------------
-	iptables -nvL OUTPUT -t nat
+	iptables -nvL OUTPUT -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS 链 --------------------------------------------------------
-	iptables -nvL SHADOWSOCKS -t nat
+	iptables -nvL SHADOWSOCKS -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_EXT 链 --------------------------------------------------------
-	iptables -nvL SHADOWSOCKS_EXT -t nat
+	iptables -nvL SHADOWSOCKS_EXT -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_GFW 链 ----------------------------------------------------
-	iptables -nvL SHADOWSOCKS_GFW -t nat
+	iptables -nvL SHADOWSOCKS_GFW -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_CHN 链 -----------------------------------------------------
-	iptables -nvL SHADOWSOCKS_CHN -t nat
+	iptables -nvL SHADOWSOCKS_CHN -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_GAM 链 -----------------------------------------------------
-	iptables -nvL SHADOWSOCKS_GAM -t nat
+	iptables -nvL SHADOWSOCKS_GAM -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_GLO 链 -----------------------------------------------------
-	iptables -nvL SHADOWSOCKS_GLO -t nat
+	iptables -nvL SHADOWSOCKS_GLO -t mangle
 	echo
 	echo ----------------------------------------------------- nat表 SHADOWSOCKS_HOM 链 -----------------------------------------------------
-	iptables -nvL SHADOWSOCKS_HOM -t nat
+	iptables -nvL SHADOWSOCKS_HOM -t mangle
 	echo -----------------------------------------------------------------------------------------------------------------------------------
 	echo
 	[ -n "$game_on" ] || [ "$ss_basic_mode" == "3" ] && echo ------------------------------------------------------ mangle表 PREROUTING 链 -------------------------------------------------------

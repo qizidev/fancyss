@@ -173,7 +173,7 @@ function conf2obj(obj, action) {
 function ssconf_node2obj(node_sel) {
 	var p = "ssconf_basic";
 	var obj = {};
-	var params2 = ["password", "v2ray_json", "server", "mode", "port", "password", "method", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_mux_enable", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_use_json"];
+	var params2 = ["password", "v2ray_json", "server", "mode", "port", "password", "method", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_mux_enable", "v2ray_ipv6_enable", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_use_json"];
 
 	for (var i = 0; i < params2.length; i++) {
 		obj["ss_basic_" + params2[i]] = db_ss[p + "_" + params2[i] + "_" + node_sel] || "";
@@ -193,12 +193,12 @@ function refresh_options() {
 	var option1 = $("#ss_basic_ping_node");
 	var option2 = $("#ss_basic_udp_node");
 	var option3 = $("#ss_failover_s4_3");
-	
+
 	option.find('option').remove().end();
 	option1.find('option').remove().end();
 	option2.find('option').remove().end();
 	option3.find('option').remove().end();
-	
+
 	option1.append('<option value="off">关闭ping功能</option>');
 	option1.append('<option value="0" selected>全部节点</option>');
 	for (var field in confs) {
@@ -262,7 +262,7 @@ function save() {
 	E("ss_state2").innerHTML = "国外连接 - " + "Waiting...";
 	E("ss_state3").innerHTML = "国内连接 - " + "Waiting...";
 	//key define
-	var params_input = ["ss_failover_s1", "ss_failover_s2_1", "ss_failover_s2_2", "ss_failover_s3_1", "ss_failover_s3_2", "ss_failover_s4_1", "ss_failover_s4_2", "ss_failover_s4_3", "ss_failover_s5", "ss_basic_interval", "ss_basic_row", "ss_basic_ping_node", "ss_basic_ping_method", "ss_dns_china", "ss_dns_china_user", "ss_foreign_dns", "ss_dns2socks_user", "ss_chinadns_user", "ss_chinadns1_user", "ss_sstunnel_user", "ss_direct_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_basic_kcp_lserver", "ss_basic_kcp_lport", "ss_basic_kcp_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_basic_exclude", "ss_basic_include", "ss_base64_links", "ss_acl_default_port", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop", "ss_basic_udpv2_other", "ss_basic_udp2raw_lserver", "ss_basic_udp2raw_lport", "ss_basic_udp2raw_rserver", "ss_basic_udp2raw_rport", "ss_basic_udp2raw_password", "ss_basic_udp2raw_rawmode", "ss_basic_udp2raw_ciphermode", "ss_basic_udp2raw_authmode", "ss_basic_udp2raw_lowerlevel", "ss_basic_udp2raw_other", "ss_basic_udp_upstream_mtu", "ss_basic_udp_upstream_mtu_value", "ss_reboot_check", "ss_basic_week", "ss_basic_day", "ss_basic_inter_min", "ss_basic_inter_hour", "ss_basic_inter_day", "ss_basic_inter_pre", "ss_basic_time_hour", "ss_basic_time_min", "ss_basic_tri_reboot_time", "ss_basic_server_resolver", "ss_basic_server_resolver_user"];
+	var params_input = ["ss_failover_s1", "ss_failover_s2_1", "ss_failover_s2_2", "ss_failover_s3_1", "ss_failover_s3_2", "ss_failover_s4_1", "ss_failover_s4_2", "ss_failover_s4_3", "ss_failover_s5", "ss_basic_interval", "ss_basic_row", "ss_basic_ping_node", "ss_basic_ping_method", "ss_dns_china", "ss_dns_china_user", "ss_foreign_dns", "ss_dns2socks_user", "ss_chinadns_user", "ss_chinadns1_user", "ss_sstunnel_user", "ss_direct_user", "ss_game2_dns_foreign", "ss_game2_dns2ss_user", "ss_basic_kcp_lserver", "ss_basic_kcp_lport", "ss_basic_kcp_server", "ss_basic_kcp_port", "ss_basic_kcp_parameter", "ss_basic_rule_update_url", "ss_basic_rule_update", "ss_basic_rule_update_time", "ssr_subscribe_mode", "ssr_subscribe_obfspara", "ssr_subscribe_obfspara_val", "ss_basic_online_links_goss", "ss_basic_node_update", "ss_basic_node_update_day", "ss_basic_node_update_hr", "ss_basic_exclude", "ss_basic_include", "ss_base64_links", "ss_acl_default_port", "ss_acl_default_mode", "ss_basic_kcp_method", "ss_basic_kcp_password", "ss_basic_kcp_mode", "ss_basic_kcp_encrypt", "ss_basic_kcp_mtu", "ss_basic_kcp_sndwnd", "ss_basic_kcp_rcvwnd", "ss_basic_kcp_conn", "ss_basic_kcp_extra", "ss_basic_udp_software", "ss_basic_udp_node", "ss_basic_udpv1_lserver", "ss_basic_udpv1_lport", "ss_basic_udpv1_rserver", "ss_basic_udpv1_rport", "ss_basic_udpv1_password", "ss_basic_udpv1_mode", "ss_basic_udpv1_duplicate_nu", "ss_basic_udpv1_duplicate_time", "ss_basic_udpv1_jitter", "ss_basic_udpv1_report", "ss_basic_udpv1_drop", "ss_basic_udpv2_lserver", "ss_basic_udpv2_lport", "ss_basic_udpv2_rserver", "ss_basic_udpv2_rport", "ss_basic_udpv2_password", "ss_basic_udpv2_fec", "ss_basic_udpv2_timeout", "ss_basic_udpv2_mode", "ss_basic_udpv2_report", "ss_basic_udpv2_mtu", "ss_basic_udpv2_jitter", "ss_basic_udpv2_interval", "ss_basic_udpv2_drop", "ss_basic_udpv2_other", "ss_basic_udp2raw_lserver", "ss_basic_udp2raw_lport", "ss_basic_udp2raw_rserver", "ss_basic_udp2raw_rport", "ss_basic_udp2raw_password", "ss_basic_udp2raw_rawmode", "ss_basic_udp2raw_ciphermode", "ss_basic_udp2raw_authmode", "ss_basic_udp2raw_lowerlevel", "ss_basic_udp2raw_other", "ss_basic_udp_upstream_mtu", "ss_basic_udp_upstream_mtu_value", "ss_reboot_check", "ss_basic_week", "ss_basic_day", "ss_basic_inter_min", "ss_basic_inter_hour", "ss_basic_inter_day", "ss_basic_inter_pre", "ss_basic_time_hour", "ss_basic_time_min", "ss_basic_tri_reboot_time", "ss_basic_server_resolver", "ss_basic_server_resolver_user"];
 	var params_check = ["ss_failover_enable", "ss_failover_c1", "ss_failover_c2", "ss_failover_c3", "ss_basic_tablet", "ss_basic_dragable", "ss_basic_qrcode", "ss_basic_enable", "ss_basic_gfwlist_update", "ss_basic_tfo", "ss_basic_tnd", "ss_basic_chnroute_update", "ss_basic_cdn_update", "ss_basic_kcp_nocomp", "ss_basic_udp_boost_enable", "ss_basic_udpv1_disable_filter", "ss_basic_udpv2_disableobscure", "ss_basic_udpv2_disablechecksum", "ss_basic_udp2raw_boost_enable", "ss_basic_udp2raw_a", "ss_basic_udp2raw_keeprule", "ss_basic_dns_hijack", "ss_basic_mcore"];
 	var params_base64_a = ["ss_dnsmasq", "ss_wan_white_ip", "ss_wan_white_domain", "ss_wan_black_ip", "ss_wan_black_domain", "ss_online_links"];
 	var params_base64_b = ["ss_basic_custom"];
@@ -321,6 +321,7 @@ function save() {
 			dbus["ssconf_basic_v2ray_network_security_" + node_sel] = "none";
 		}
 		dbus["ssconf_basic_v2ray_mux_enable_" + node_sel] = 1;
+		dbus["ssconf_basic_v2ray_ipv6_enable_" + node_sel] = 0;
 		dbus["ssconf_basic_v2ray_mux_concurrency_" + node_sel] = 8;
 		dbus["ssconf_basic_v2ray_use_json_" + node_sel] = 0;
 		dbus["ssconf_basic_v2ray_json"] = "";
@@ -329,7 +330,7 @@ function save() {
 			if(isJSON(E('ss_basic_v2ray_json').value)){
 				if(E('ss_basic_v2ray_json').value.indexOf("outbound") != -1){
 					dbus["ssconf_basic_v2ray_json_" + node_sel] = Base64.encode(pack_js(E('ss_basic_v2ray_json').value));
-					var param_v2 = ["server", "port", "v2ray_uuid", "v2ray_security", "v2ray_alterid", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_host", "v2ray_network_path", "v2ray_network_security", "v2ray_mux_enable", "v2ray_mux_concurrency"];
+					var param_v2 = ["server", "port", "v2ray_uuid", "v2ray_security", "v2ray_alterid", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_host", "v2ray_network_path", "v2ray_network_security", "v2ray_mux_enable", "v2ray_mux_concurrency", "v2ray_ipv6_enable"];
 					for (var i = 0; i < param_v2.length; i++) {
 						dbus["ssconf_basic_" + param_v2[i] + "_" + node_sel] = "";
 					}
@@ -352,11 +353,12 @@ function save() {
 	dbus["ssconf_basic_use_kcp_" + node_sel] = E("ss_basic_use_kcp").checked ? '1' : '0';
 	dbus["ssconf_basic_v2ray_use_json_" + node_sel] = E("ss_basic_v2ray_use_json").checked ? '1' : '0';
 	dbus["ssconf_basic_v2ray_mux_enable_" + node_sel] = E("ss_basic_v2ray_mux_enable").checked ? '1' : '0';
+	dbus["ssconf_basic_v2ray_ipv6_enable_" + node_sel] = E("ss_basic_v2ray_ipv6_enable").checked ? '1' : '0';
 	// node data: base64
 	dbus["ssconf_basic_password_" + node_sel] = Base64.encode(E("ss_basic_password").value);
 	// adjust some value when switch node between ss ssr v2ray koolgame
 	if (typeof(db_ss["ssconf_basic_rss_protocol_" + node_sel]) != "undefined"){
-		var remove_ssr = [ "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_mux_concurrency", "v2ray_json"];
+		var remove_ssr = [ "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_ipv6_enable", "v2ray_mux_concurrency", "v2ray_json"];
 		dbus["ss_basic_type"] = "1"
 		dbus["ssconf_basic_type_" + node_sel] = "1"
 		for (var i = 0; i < remove_ssr.length; i++) {
@@ -365,7 +367,7 @@ function save() {
 		}
 	} else {
 		if (typeof(db_ss["ssconf_basic_koolgame_udp_" + node_sel]) != "undefined"){
-			var remove_gamev2 = [ "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_mux_concurrency", "v2ray_json"];
+			var remove_gamev2 = [ "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_ipv6_enable", "v2ray_mux_concurrency", "v2ray_json"];
 			dbus["ss_basic_type"] = "2"
 			dbus["ssconf_basic_type_" + node_sel] = "2"
 			for (var i = 0; i < remove_gamev2.length; i++) {
@@ -382,7 +384,7 @@ function save() {
 					dbus["ssconf_basic_" + remove_v2ray[i] + "_" + node_sel] = "";
 				}
 			}else{
-				var remove_ss = [ "koolgame_udp", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_mux_concurrency", "v2ray_json"];
+				var remove_ss = [ "koolgame_udp", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "v2ray_use_json", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_enable", "v2ray_ipv6_enable", "v2ray_mux_concurrency", "v2ray_json"];
 				dbus["ss_basic_type"] = "0"
 				dbus["ssconf_basic_type_" + node_sel] = "0"
 				for (var i = 0; i < remove_ss.length; i++) {
@@ -498,6 +500,7 @@ function verifyFields(r) {
 	elem.display(elem.parentElem('ss_basic_v2ray_network_path', 'tr'), (v2ray_on && json_off && path_on));
 	elem.display(elem.parentElem('ss_basic_v2ray_network_security', 'tr'), (v2ray_on && json_off));
 	elem.display(elem.parentElem('ss_basic_v2ray_mux_enable', 'tr'), (v2ray_on && json_off));
+	elem.display(elem.parentElem('ss_basic_v2ray_ipv6_enable', 'tr'), (v2ray_on));
 	elem.display(elem.parentElem('ss_basic_v2ray_mux_concurrency', 'tr'), (v2ray_on && json_off && E("ss_basic_v2ray_mux_enable").checked));
 	elem.display(elem.parentElem('ss_basic_v2ray_json', 'tr'), (v2ray_on && json_on));
 	elem.display('v2ray_binary_update_tr', v2ray_on);
@@ -525,6 +528,7 @@ function verifyFields(r) {
 			E('v2ray_network_host_tr').style.display = "none";
 			E('v2ray_network_security_tr').style.display = "none";
 			E('v2ray_mux_enable_tr').style.display = "none";
+			E('v2ray_ipv6_enable_tr').style.display = "";
 			E('v2ray_mux_concurrency_tr').style.display = "none";
 			E('v2ray_json_tr').style.display = "";
 		}else{
@@ -540,6 +544,7 @@ function verifyFields(r) {
 			E('v2ray_network_host_tr').style.display = "";
 			E('v2ray_network_security_tr').style.display = "";
 			E('v2ray_mux_enable_tr').style.display = "";
+			E('v2ray_ipv6_enable_tr').style.display = "";
 			E('v2ray_mux_concurrency_tr').style.display = "";
 			E('v2ray_json_tr').style.display = "none";
 			var http_on_2 = E("ss_node_table_v2ray_network").value == "tcp" && E("ss_node_table_v2ray_headtype_tcp").value == "http";
@@ -611,7 +616,7 @@ function verifyFields(r) {
 		var dbus_post = {};
 		dbus_post[trid] = E(trid).checked ? '1' : '0';
 		push_data("dummy_script.sh", "", dbus_post, "1");
-	}	
+	}
 	refresh_acl_table();
 }
 function update_visibility() {
@@ -714,6 +719,7 @@ function tabclickhandler(_type) {
 		E('v2ray_network_security_tr').style.display = "none";
 		E('v2ray_mux_enable_tr').style.display = "none";
 		E('v2ray_mux_concurrency_tr').style.display = "none";
+		E('v2ray_ipv6_enable_tr').style.display = "none";
 		E('v2ray_json_tr').style.display = "none";
 		showhide("ss_obfs_support", ($("#ss_node_table_mode").val() != "3"));
 		showhide("ss_obfs_host_support", ($("#ss_node_table_mode").val() != "3" && $("#ss_node_table_ss_obfs").val() != "0"));
@@ -748,6 +754,7 @@ function tabclickhandler(_type) {
 		E('v2ray_network_security_tr').style.display = "none";
 		E('v2ray_mux_enable_tr').style.display = "none";
 		E('v2ray_mux_concurrency_tr').style.display = "none";
+		E('v2ray_ipv6_enable_tr').style.display = "none";
 		E('v2ray_json_tr').style.display = "none";
 	} else if (_type == 2) {
 		save_flag = "gameV2";
@@ -778,6 +785,7 @@ function tabclickhandler(_type) {
 		E('v2ray_network_security_tr').style.display = "none";
 		E('v2ray_mux_enable_tr').style.display = "none";
 		E('v2ray_mux_concurrency_tr').style.display = "none";
+		E('v2ray_ipv6_enable_tr').style.display = "none";
 		E('v2ray_json_tr').style.display = "none";
 	} else if (_type == 3) {
 		save_flag = "v2ray";
@@ -806,6 +814,7 @@ function tabclickhandler(_type) {
 		E('v2ray_network_security_tr').style.display = "";
 		E('v2ray_mux_enable_tr').style.display = "";
 		E('v2ray_mux_concurrency_tr').style.display = "";
+		E('v2ray_ipv6_enable_tr').style.display = "";
 		E('v2ray_json_tr').style.display = "";
 		if(E("ss_node_table_v2ray_use_json").checked){
 			E('ss_server_support_tr').style.display = "none";
@@ -821,6 +830,7 @@ function tabclickhandler(_type) {
 			E('v2ray_network_security_tr').style.display = "none";
 			E('v2ray_mux_enable_tr').style.display = "none";
 			E('v2ray_mux_concurrency_tr').style.display = "none";
+			E('v2ray_ipv6_enable_tr').style.display = "";
 			E('v2ray_json_tr').style.display = "";
 		}else{
 			E('ss_server_support_tr').style.display = "";
@@ -836,6 +846,7 @@ function tabclickhandler(_type) {
 			E('v2ray_network_security_tr').style.display = "";
 			E('v2ray_mux_enable_tr').style.display = "";
 			E('v2ray_mux_concurrency_tr').style.display = "";
+			E('v2ray_ipv6_enable_tr').style.display = "";
 			E('v2ray_json_tr').style.display = "none";
 			var http_on_2 = E("ss_node_table_v2ray_network").value == "tcp" && E("ss_node_table_v2ray_headtype_tcp").value == "http";
 			var host_on_2 = E("ss_node_table_v2ray_network").value == "ws" || E("ss_node_table_v2ray_network").value == "h2" || http_on_2;
@@ -847,7 +858,7 @@ function tabclickhandler(_type) {
 			showhide("v2ray_mux_concurrency_tr", (E("ss_node_table_v2ray_mux_enable").checked));
 			showhide("v2ray_json_tr", (E("ss_node_table_v2ray_use_json").checked));
 		}
-	} 
+	}
 	return save_flag;
 }
 function add_ss_node_conf(flag) {
@@ -858,7 +869,7 @@ function add_ss_node_conf(flag) {
 	var params2 = ["mode", "name", "server", "port", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param"];
 	var params3 = ["mode", "name", "server", "port", "method", "koolgame_udp"];
 	var params4_1 = ["mode", "name", "server", "port", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency"]; //for v2ray
-	var params4_2 = ["v2ray_use_json", "v2ray_mux_enable"];
+	var params4_2 = ["v2ray_use_json", "v2ray_mux_enable", "v2ray_ipv6_enable"];
 	if(!$.trim($('#ss_node_table_name').val())){
 		alert("节点名不能为空！！");
 		return false;
@@ -910,8 +921,9 @@ function add_ss_node_conf(flag) {
 					ns[p + "_v2ray_network_security_" + node_max] = "tls";
 				}else{
 					ns[p + "_v2ray_network_security_" + node_max] = "none";
-				}	
+				}
 				ns[p + "_v2ray_mux_enable_" + node_max] = 1;
+				ns[p + "_v2ray_ipv6_enable_" + node_max] = 0;
 				ns[p + "_v2ray_mux_concurrency_" + node_max] = 8;
 				ns[p + "_v2ray_use_json_" + node_max] = 0;
 				ns[p + "_v2ray_json_" + node_max] = "";
@@ -981,7 +993,7 @@ function remove_conf_table(o) {
 
 	var dbus_tmp = {};
 	var perf = "ssconf_basic_"
-	var temp = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "use_lb", "ping", "lbmode", "weight", "use_kcp", "group", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_json", "v2ray_use_json", "v2ray_mux_enable", "type"];
+	var temp = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "use_lb", "ping", "lbmode", "weight", "use_kcp", "group", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_json", "v2ray_use_json", "v2ray_mux_enable", "v2ray_ipv6_enable", "type"];
 	var new_nodes = ss_nodes.concat()
 	new_nodes.splice(new_nodes.indexOf(id), 1);
 	//first: mark all node from ss_nodes data as empty
@@ -1031,7 +1043,7 @@ function edit_conf_table(o) {
 	}
 	var c = confs[id];
 	var params1_base64 = ["password"];
-	var params1_check = ["v2ray_use_json", "v2ray_mux_enable"];
+	var params1_check = ["v2ray_use_json", "v2ray_mux_enable", "v2ray_ipv6_enable"];
 	var params1_input = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "koolgame_udp", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency"];
 	if(c["v2ray_json"]){
 		E("ss_node_table_v2ray_json").value = do_js_beautify(Base64.decode(c["v2ray_json"]));
@@ -1070,7 +1082,7 @@ function edit_conf_table(o) {
 			E("v2rayTitle").style.display = "none";
 			$("#gamev2Title").html("编辑koolgame账号");
 			tabclickhandler(2);
-		}else { 
+		}else {
 			if(c["v2ray_use_json"] == "0" || c["v2ray_use_json"] == "1") {
 				E("ssTitle").style.display = "none";
 				E("ssrTitle").style.display = "none";
@@ -1105,8 +1117,8 @@ function edit_ss_node_conf(flag) {
 	var params1 = ["name", "server", "mode", "port", "method", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts"];
 	var params2 = ["name", "server", "mode", "port", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param"];
 	var params3 = ["name", "server", "mode", "port", "method", "koolgame_udp"]
-	var params4_1 = ["mode", "name", "server", "port", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency"]; //for v2ray
-	var params4_2 = ["v2ray_use_json", "v2ray_mux_enable"];
+	var params4_1 = ["mode", "name", "server", "port", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_ipv6_enable"]; //for v2ray
+	var params4_2 = ["v2ray_use_json", "v2ray_mux_enable", "v2ray_ipv6_enable"];
 	if (flag == 'shadowsocks') {
 		for (var i = 0; i < params1.length; i++) {
 			ns[p + "_" + params1[i] + "_" + edit_id] = $('#ss_node_table' + "_" + params1[i]).val();
@@ -1156,6 +1168,7 @@ function edit_ss_node_conf(flag) {
 					ns["ssconf_basic_v2ray_network_security_" + edit_id] = "none";
 				}
 				ns["ssconf_basic_v2ray_mux_enable_" + edit_id] = 0;
+				ns["ssconf_basic_v2ray_ipv6_enable_" + edit_id] = 0;
 				ns["ssconf_basic_v2ray_mux_concurrency_" + edit_id] = 8;
 				ns["ssconf_basic_v2ray_use_json_" + edit_id] = 0;
 				ns["ssconf_basic_v2ray_json_" + edit_id] = "";
@@ -1165,7 +1178,7 @@ function edit_ss_node_conf(flag) {
 			}
 		}
 		ns[p + "_type_" + edit_id] = "3";
-	} 
+	}
 	var id = parseInt(Math.random() * 100000000);
 	var postData = {"id": id, "method": "dummy_script.sh", "params":[], "fields": ns };
 	$.ajax({
@@ -1254,7 +1267,7 @@ function generate_node_info() {
 			}
 		}
 		//兼容部分，这些值是空的话需要填为0
-		var params_sp = ["use_kcp", "use_lb", "v2ray_mux_enable"];
+		var params_sp = ["use_kcp", "use_lb", "v2ray_mux_enable", "v2ray_ipv6_enable"];
 		for (var i = 0; i < params_sp.length; i++) {
 			if (typeof db_ss[p + "_" + params_sp[i] + "_" + idx] == "undefined") {
 				obj[params_sp[i]] = '0';
@@ -1337,7 +1350,7 @@ function refresh_html() {
 	//console.log("实际显示的行：", ss_nodes.length);
 	//console.log("节点列表上界：", nodeT);
 	//console.log("节点列表高度：", nodeH);
-	// write option to ss_basic_row 
+	// write option to ss_basic_row
 	$("#ss_basic_row").find('option').remove().end();
 	for (var i = 10; i <= nodeL; i++) {
 		$("#ss_basic_row").append('<option value="' + i + '">' + i + '</option>');
@@ -1346,7 +1359,7 @@ function refresh_html() {
 		$("#ss_basic_row").append('<option value="all">全部显示</option>');
 	}
 	E("ss_basic_row").value = db_ss["ss_basic_row"]||nodeL;
-	
+
 	// define col width in different situation
 	if(node_nu && E("ss_basic_ping_node") != "off" && E("ss_basic_ping_node") != ""){
 		var width = ["", "5%", "30%", "30%", "8%", "12%", "10%", "5%", ];
@@ -1370,11 +1383,11 @@ function refresh_html() {
 	html += '</tr>'
 	html += '</table>'
 	html += '</div>'
-	
+
 	html += '<div class="nodeTable" style="top: ' + nodeT + 'px; width: 750px; height: ' + nodeH + 'px; overflow: hidden; position: absolute;">'
 	html += '<div id="ss_node_list_table_main" style="width: 750px; height: ' + nodeH + 'px; overflow: hidden scroll; padding-right: 35px;">'
 	html += '<table id="ss_node_list_table" style="margin:-1px 0px 0px 0px;" width="750px" border="0" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="list_table">'
-	
+
 	for (var i = 0; i < ss_nodes.length; i++) {
 		var c = confs[ss_nodes[i]];
 	//for (var field in confs) {
@@ -1516,7 +1529,7 @@ function save_new_order(){
 	var tr = table.getElementsByTagName("tr");
 	var dbus_tmp = {};
 	var perf = "ssconf_basic_"
-	var temp = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "use_lb", "ping", "lbmode", "weight", "use_kcp", "group", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_json", "v2ray_use_json", "v2ray_mux_enable", "type"];
+	var temp = ["name", "server", "server_ip", "mode", "port", "password", "method", "rss_protocol", "rss_protocol_param", "rss_obfs", "rss_obfs_param", "use_kcp", "ss_obfs", "ss_obfs_host", "ss_v2ray", "ss_v2ray_opts", "koolgame_udp", "use_lb", "ping", "lbmode", "weight", "use_kcp", "group", "v2ray_uuid", "v2ray_alterid", "v2ray_security", "v2ray_network", "v2ray_headtype_tcp", "v2ray_headtype_kcp", "v2ray_network_path", "v2ray_network_host", "v2ray_network_security", "v2ray_mux_concurrency", "v2ray_json", "v2ray_use_json", "v2ray_mux_enable", "v2ray_ipv6_enable", "type"];
 	//first: mark all node from ss_nodes data as empty
 	for (var i = 0; i < tr.length; i++) {
 		var rowid = tr[i].getAttribute("id").split("_")[1];
@@ -2024,6 +2037,7 @@ function remove_SS_node() {
 function updatelist(arg) {
 	var dbus_post = {};
 	db_ss["ss_basic_action"] = "8";
+	dbus_post["ss_basic_rule_update_url"] = E("ss_basic_rule_update_url").value;
 	dbus_post["ss_basic_rule_update"] = E("ss_basic_rule_update").value;
 	dbus_post["ss_basic_rule_update_time"] = E("ss_basic_rule_update_time").value;
 	dbus_post["ss_basic_gfwlist_update"] = E("ss_basic_gfwlist_update").checked ? '1' : '0';
@@ -2278,7 +2292,7 @@ function lookup_status_log(s) {
 }
 function get_status_log(s) {
 	if(STATUS_FLAG == 0) return;
-	
+
 	if(s == 1){
 		var file = '/_temp/ssf_status.txt';
 		var retArea = E("log_content_f");
@@ -2328,7 +2342,7 @@ function get_log() {
 			var retArea = E("log_content1");
 			if (response.search("XU6J03M6") != -1) {
 				retArea.value = response.replace("XU6J03M6", " ");
-				var pageH = parseInt(E("FormTitle").style.height.split("px")[0]); 
+				var pageH = parseInt(E("FormTitle").style.height.split("px")[0]);
 				if(pageH){
 					autoTextarea(E("log_content1"), 0, (pageH - 308));
 				}else{
@@ -2634,13 +2648,13 @@ function refresh_acl_html() {
 	for (var field in acl_confs) {
 		var ac = acl_confs[field];
 		code += '<tr id="acl_tr_' + ac["acl_node"] + '">';
-		
+
 		code += '<td width="23%">' + ac["ip"] + '</td>';
-		
+
 		code += '<td width="23%">';
 		code += '<input type="text" placeholder="' + ac["acl_node"] + '号机" id="ss_acl_name_' + ac["acl_node"] + '" name="ss_acl_name_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
 		code += '</td>';
-		
+
 		code += '<td width="23%">';
 		code += '<select id="ss_acl_mode_' + ac["acl_node"] + '" name="ss_acl_mode_' + ac["acl_node"] + '" style="width:140px;margin:0px 0px 0px 2px;" class="sel_option" onchange="set_mode_2(this);">';
 		if ($("#ss_basic_mode").val() == 6) {
@@ -2656,7 +2670,7 @@ function refresh_acl_html() {
 		}
 		code += '</select>'
 		code += '</td>';
-		
+
 		code += '<td width="23%">';
 		if (ac["mode"] == 3) {
 			code += '<input type="text" id="ss_acl_port_' + ac["acl_node"] + '" name="ss_acl_port_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" title="不可更改，游戏模式下默认全端口" readonly = "readonly" />';
@@ -2666,7 +2680,7 @@ function refresh_acl_html() {
 			code += '<input type="text" id="ss_acl_port_' + ac["acl_node"] + '" name="ss_acl_port_' + ac["acl_node"] + '" class="input_option_2" maxlength="50" style="width:140px;" placeholder="" />';
 		}
 		code += '</td>';
-		
+
 		code += '<td width="8%">';
 		code += '<input style="margin: -2px 0px -4px -2px;" id="acl_node_' + ac["acl_node"] + '" class="remove_btn" type="button" onclick="delTr(this);" value="">'
 		code += '</td>';
@@ -2728,7 +2742,7 @@ function refresh_acl_html() {
 
 	$(".acl_lists").remove();
 	$('#ss_acl_table').after(code);
-	
+
 	showDropdownClientList('setClientIP', 'ip', 'all', 'ClientList_Block', 'pull_arrow', 'online');
 }
 function setClientIP(ip, name, mac) {
@@ -2842,7 +2856,7 @@ function set_cron(action) {
 		for (var i = 0; i < cron_params1.length; i++) {
 			dbus_post[cron_params1[i]] = E(cron_params1[i]).value;
 		}
-		
+
 		if (!E("ss_basic_custom").value) {
 			dbus_post["ss_basic_custom"] = "";
 		} else {
@@ -3087,6 +3101,7 @@ function save_failover() {
 																	{ title: '伪装域名 (host)', rid:'v2ray_network_host_tr', id:'ss_node_table_v2ray_network_host', type:'text', maxlen:'300', style:'width:338px'},
 																	{ title: '路径 (path)', rid:'v2ray_network_path_tr', id:'ss_node_table_v2ray_network_path', type:'text', maxlen:'300', style:'width:338px', ph:'没有请留空'},
 																	{ title: '底层传输安全', rid:'v2ray_network_security_tr', id:'ss_node_table_v2ray_network_security', type:'select', options:[["none", "关闭"], ["tls", "tls"]], style:'width:350px', value: "none"},
+																	{ title: '开启IPv6', rid:'v2ray_ipv6_enable_tr', id:'ss_node_table_v2ray_ipv6_enable', type:'checkbox', func:'v', value:false},
 																	{ title: '多路复用 (Mux)', rid:'v2ray_mux_enable_tr', id:'ss_node_table_v2ray_mux_enable', type:'checkbox', func:'v', value:false},
 																	{ title: 'Mux并发连接数', rid:'v2ray_mux_concurrency_tr', id:'ss_node_table_v2ray_mux_concurrency', type:'text', maxlen:'300', style:'width:338px'},
 																	{ title: 'v2ray json', rid:'v2ray_json_tr', id:'ss_node_table_v2ray_json', type:'textarea', rows:'32', ph:ph_v2ray, style:'width:344px'},
@@ -3136,6 +3151,7 @@ function save_failover() {
 														{ title: '底层传输安全', id:'ss_basic_v2ray_network_security', type:'select', hint:'30', options:[["none", "关闭"], ["tls", "tls"]]},
 														{ title: '多路复用 (Mux)', id:'ss_basic_v2ray_mux_enable', type:'checkbox', func:'v', hint:'31'},
 														{ title: 'Mux并发连接数', id:'ss_basic_v2ray_mux_concurrency', type:'text', hint:'32', maxlen:'300'},
+														{ title: '开启IPv6', id:'ss_basic_v2ray_ipv6_enable', type:'checkbox', func:'v', hint:'31'},
 														{ title: 'v2ray json', id:'ss_basic_v2ray_json', type:'textarea', rows:'36', ph:ph_v2ray},
 														{ title: '其它', rid:'v2ray_binary_update_tr', prefix: '<a type="button" class="ss_btn" style="cursor:pointer" onclick="v2ray_binary_update(2)">更新V2Ray程序</a>'}
 													]);
@@ -3212,7 +3228,7 @@ function save_failover() {
 												<input class="button_gen" type="button" onclick="save()" value="保存&amp;应用">
 												<input style="margin-left:10px" id="ss_failover_save" class="button_gen" onclick="save_failover()" type="button" value="保存本页设置">
 											</div>
-											
+
 										</div>
 										<div id="tablet_3" style="display: none;">
 											<table id="table_dns" width="100%" border="1" align="center" cellpadding="4" cellspacing="0" bordercolor="#6b8fa3" class="FormTable">
@@ -3241,12 +3257,12 @@ function save_failover() {
 															{ id: 'ss_game2_dns_foreign', type:'select', func:'u', disabled:'1', options:[["1", "koolgame内置"]], style:'width:auto;'},
 															{ id: 'ss_game2_dns2ss_user', type: 'text', value:'8.8.8.8:53', ph:ph1 },
 															{ suffix: '<br/>&nbsp;<span id="dns_plan_foreign0">默认使用koolgame内置的DNS2SS域名解析</span>' },
-														]},														
+														]},
 														{ title: 'DNS劫持（原chromecast功能）', id:'ss_basic_dns_hijack', type:'checkbox', func:'v', hint:'106', value:true},
 														{ title: '节点域名解析DNS服务器', hint:'107', multi: [
 															{ id: 'ss_basic_server_resolver', type:'select', func:'u', options:option_dnsr, style:'width:auto;', value:'13'},
 															{ id: 'ss_basic_server_resolver_user', type: 'text'},
-														]},	
+														]},
 														{ title: '自定义dnsmasq', id:'ss_dnsmasq', type:'textarea', hint:'34', rows:'12', ph:ph3},
 													]);
 												</script>
@@ -3461,7 +3477,9 @@ function save_failover() {
 													//var ipsn='<% nvram_get("chnroute_ips"); %>'
 													var gfwl = addCommas('<% nvram_get("ipset_numbers"); %>');
 													var chnl = addCommas('<% nvram_get("chnroute_numbers"); %>');
+													var chnl6 = addCommas('<% nvram_get("chnroute6_numbers"); %>');
 													var chnn = addCommas('<% nvram_get("chnroute_ips"); %>');
+													var chnn6 = addCommas('<% nvram_get("chnroute6_ips"); %>');
 													var cdnn = addCommas('<% nvram_get("cdn_numbers"); %>');
 													$('#table_rules').forms([
 														{ title: 'gfwlist域名数量', multi: [
@@ -3474,12 +3492,18 @@ function save_failover() {
 															{ suffix: '<a href="https://github.com/hq450/fancyss/blob/master/rules/chnroute.txt" target="_blank">' },
 															{ suffix: '<i><% nvram_get("update_chnroute"); %></i></a>' },
 														]},
+														{ title: "大陆白名单IP段数量(ipv6)", multi: [
+															{ suffix: "<em>"+ chnl6 +"</em>&nbsp;行，包含 <em>" + chnn6 + "</em>&nbsp;个ip地址，版本：" },
+															{ suffix: "<a href=\"\" target=\"_blank\">" },
+															{ suffix: '<i><% nvram_get("update_chnroute6"); %></i></a>' },
+														]},
 														{ title: '国内域名数量（cdn名单）', multi: [
 															{ suffix: '<em>'+ cdnn +'</em>&nbsp;条，版本：' },
 															{ suffix: '<a href="https://github.com/hq450/fancyss/blob/master/rules/cdn.txt" target="_blank">' },
 															{ suffix: '<i><% nvram_get("update_cdn"); %></i></a>' },
 														]},
 														{ title: '规则定时更新任务', hint:'44', multi: [
+														    { id:'ss_basic_rule_update_url', type:'text', style:'width:95%;display:block;margin-bottom:10px', ph:'规则更新的URL地址'},
 															{ id:'ss_basic_rule_update', type:'select', func:'u', style:'width:auto', options:[["0", "禁用"], ["1", "开启"]], value:'0'},
 															{ id:'ss_basic_rule_update_time', type:'select', style:'width:auto', options:option_ruleu, value:'4'},
 															{ suffix: '<a id="update_choose">' },
@@ -3605,7 +3629,7 @@ function save_failover() {
 															{ suffix:'<img id="loadingicon" style="margin-left:5px;margin-right:5px;display:none;" src="/images/InternetScan.gif"/>'},
 															{ suffix:'<span id="ss_file_info" style="display:none;">完成</span>'},
 															{ suffix:'<input type="button" class="ss_btn" style="cursor:pointer;" onclick="upload_ss_backup();" value="恢复配置"/>'},
-														]},											
+														]},
 														{ td: '<tr><td class="smth" style="font-weight: bold;" colspan="2">定时任务</td></tr>'},
 														{ title: '&nbsp;&nbsp;&nbsp;&nbsp;插件定时重启设定', multi: [
 															{ id:'ss_reboot_check', type:'select', style:'width:auto', func:'v', options:option_rebc, value:'0'},
@@ -3642,7 +3666,7 @@ function save_failover() {
 														{ title: '&nbsp;&nbsp;&nbsp;&nbsp;ss-libev / v2ray 开启tcp fast open', id:'ss_basic_tfo', type:'checkbox', value:false},
 														{ title: '&nbsp;&nbsp;&nbsp;&nbsp;ss-libev 开启TCP_NODELAY', id:'ss_basic_tnd', type:'checkbox', value:false},
 													]);
-												</script> 
+												</script>
 											</table>
 										</div>
 										<div id="tablet_10" style="display: none;">

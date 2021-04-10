@@ -194,9 +194,24 @@ else
 	sed -i "9c $(date +%Y-%m-%d) # $md5sum15 google_china" ../version1
 fi
 echo =================
+curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep CN | grep ipv6 | awk -F'|' '{printf("%s/%d\n", $4, $5)}' >chnroute2.txt
+
+md5sum17=$(md5sum chnroute2.txt | sed 's/ /\n/g' | sed -n 1p)
+md5sum18=$(md5sum ../chnroute6.txt | sed 's/ /\n/g' | sed -n 1p)
+
+if [ "$md5sum17"x = "$md5sum18"x ]; then
+  echo chnroute6 same md5!
+else
+  IPLINE=$(cat chnroute2.txt | wc -l)
+  IPCOUN=$(awk -F "/" '{sum += 2^(32-$2)-2};END {print sum}' chnroute2.txt)
+  echo update chnroute6, "$IPLINE" subnets, "$IPCOUN" unique IPs !
+  cp -f chnroute2.txt ../chnroute6.txt
+  sed -i "10c $(date +%Y-%m-%d) # $md5sum17 chnroute6" ../version1
+fi
+echo =================
 # ======================================
-rm google.china.conf
-rm apple.china.conf
-rm gfwlist1.conf gfwlist_download.conf gfwlist_download_tmp.conf chnroute1.txt
-rm cdn1.txt accelerated-domains.china.conf cdn_download.txt apple_download.txt google_download.txt
-rm WhiteList.txt WhiteList_tmp.txt apnic.txt WhiteList_new.txt Routing.txt
+rm -f google.china.conf
+rm -f apple.china.conf
+rm -f gfwlist1.conf gfwlist_download.conf gfwlist_download_tmp.conf chnroute1.txt chnroute2.txt
+rm -f cdn1.txt accelerated-domains.china.conf cdn_download.txt apple_download.txt google_download.txt
+rm -f WhiteList.txt WhiteList_tmp.txt apnic.txt WhiteList_new.txt Routing.txt

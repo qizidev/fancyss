@@ -45,6 +45,7 @@ readonly PREFIX="ssconf_basic_name_
 				ssconf_basic_v2ray_network_host_
 				ssconf_basic_v2ray_network_security_
 				ssconf_basic_v2ray_mux_enable_
+				ssconf_basic_v2ray_ipv6_enable_
 				ssconf_basic_v2ray_mux_concurrency_
 				ssconf_basic_v2ray_json_
 				ssconf_basic_ss_v2ray_
@@ -58,7 +59,7 @@ set_lock(){
 		local PID2=$(ps|grep -w "ss_online_update.sh"|grep -vw "grep"|grep -vw ${PID1})
 		if [ -n "${PID2}" ];then
 			echo_date "订阅脚本已经在运行，请稍候再试！"
-			exit 1			
+			exit 1
 		else
 			rm -rf $LOCK_FILE
 		fi
@@ -197,7 +198,7 @@ prepare(){
 		#sed '1 i#!/bin/sh' | \
 		#sed '$a #------------------------' \
 		>> $BACKUP_FILE
-		
+
 		echo_date "备份完毕，开始调整..."
 		# 2 应用提取的干净的节点配置
 		chmod +x $BACKUP_FILE
@@ -219,7 +220,7 @@ prepare(){
 			usleep 300000
 			#------------------------
 		EOF
-		
+
 		local KEY="$(echo ${PREFIX} | sed 's/\s/|/g')"
 		export -p | \
 		grep "ssconf_basic" | \
@@ -311,7 +312,7 @@ get_v2ray_remote_config(){
 	v2ray_type=$(echo "$decode_link" | jq -r .type)
 	v2ray_tls_tmp=$(echo "$decode_link" | jq -r .tls)
 	[ "$v2ray_tls_tmp"x == "tls"x ] && v2ray_tls="tls" || v2ray_tls="none"
-	
+
 	if [ "$v2ray_v" == "2" ]; then
 		# "new format"
 		v2ray_path=$(echo "$decode_link" | jq -r .path)
@@ -365,7 +366,7 @@ get_v2ray_remote_config(){
 	# echo v2ray_path: $v2ray_path
 	# echo v2ray_tls: $v2ray_tls
 	# echo ------------------
-	
+
 	[ -z "$v2ray_ps" -o -z "$v2ray_add" -o -z "$v2ray_port" -o -z "$v2ray_id" -o -z "$v2ray_aid" -o -z "$v2ray_net" -o -z "$v2ray_type" ] && return 1 || return 0
 }
 
@@ -374,6 +375,7 @@ add_v2ray_servers(){
 	[ -z "$1" ] && dbus set ssconf_basic_group_$NODE_INDEX=$v2ray_group
 	dbus set ssconf_basic_type_$NODE_INDEX=3
 	dbus set ssconf_basic_v2ray_mux_enable_$NODE_INDEX=0
+	dbus set ssconf_basic_v2ray_ipv6_enable_$NODE_INDEX=0
 	dbus set ssconf_basic_v2ray_use_json_$NODE_INDEX=0
 	dbus set ssconf_basic_v2ray_security_$NODE_INDEX="auto"
 	dbus set ssconf_basic_mode_$NODE_INDEX=$ssr_subscribe_mode
@@ -467,10 +469,10 @@ get_ssr_node_info(){
 	obfs=$(echo "$decode_link" | awk -F':' '{print $5}' | sed 's/_compatible//g')
 	password=$(decode_url_link $(echo "$decode_link" | awk -F':' '{print $6}' | awk -F'/' '{print $1}'))
 	password=$(echo $password | base64_encode | sed 's/\s//g')
-	
+
 	obfsparam_temp=$(echo "$decode_link" | awk -F':' '{print $6}' | grep -Eo "obfsparam.+" | sed 's/obfsparam=//g' | awk -F'&' '{print $1}')
 	[ -n "$obfsparam_temp" ] && obfsparam=$(decode_url_link $obfsparam_temp) || obfsparam=''
-	
+
 	protoparam_temp=$(echo "$decode_link" | awk -F':' '{print $6}' | grep -Eo "protoparam.+" | sed 's/protoparam=//g' | awk -F'&' '{print $1}')
 	[ -n "$protoparam_temp" ] && protoparam=$(decode_url_link $protoparam_temp | sed 's/_compatible//g' | sed 's/\s//g') || protoparam=''
 	
@@ -480,7 +482,7 @@ get_ssr_node_info(){
 	elif [ "$action" == "2" ]; then
 		[ -n "$remarks_temp" ] && remarks=$(decode_url_link $remarks_temp) || remarks='AutoSuB'
 	fi
-	
+
 	group_temp=$(echo "$decode_link" | awk -F':' '{print $6}' | grep -Eo "group.+" | sed 's/group=//g' | awk -F'&' '{print $1}')
 	if [ "$action" == "1" ]; then
 		[ -n "$group_temp" ] && group=$(decode_url_link $group_temp) || group=""
@@ -491,17 +493,17 @@ get_ssr_node_info(){
 	[ -n "$group" ] && group_base64=$(echo $group | base64_encode | sed 's/ -//g')
 	[ -n "$server" ] && server_base64=$(echo $server | base64_encode | sed 's/ -//g')
 	[ -n "$remarks" ] && remark_base64=$(echo $remarks | base64_encode | sed 's/ -//g')
- 
+
 	if [ -n "$group" -a -n "$server" -a -n "$server_port" -a -n "$password" -a -n "$protocol" -a -n "$obfs" -a -n "$encrypt_method" ]; then
 		group_base64=$(echo $group | base64_encode | sed 's/ -//g')
-		server_base64=$(echo $server | base64_encode | sed 's/ -//g')	
+		server_base64=$(echo $server | base64_encode | sed 's/ -//g')
 		remark_base64=$(echo $remarks | base64_encode | sed 's/ -//g')
 		echo $server_base64 $group_base64 $remark_base64 >> /tmp/all_subscservers.txt
 		echo "$group" >> /tmp/all_group_info.txt
 	else
 		return 1
 	fi
-	
+
 	# for debug, please keep it here~
 	# echo ------------
 	# echo group: $group
@@ -528,18 +530,18 @@ update_ssr_nodes(){
 		echo_date "检测到一个错误节点，跳过！"
 		return 1
 	fi
-	
+
 	# ------------------------------- 关键词匹配逻辑 -------------------------------
 	# 用[排除]和[包括]关键词去匹配，剔除掉用户不需要的节点，剩下的需要的节点：UPDATE_FLAG=0，
 	# UPDATE_FLAG=0,需要的节点；1.判断本地是否有此节点，2.如果有就添加，没有就判断是否需要更新
 	# UPDATE_FLAG=2,不需要的节点；1. 判断本地是否有此节点，2.如果有就删除，没有就不管
-	
+
 	[ -n "$KEY_WORDS_1" ] && local KEY_MATCH_1=$(echo $remarks $server | grep -Eo "$KEY_WORDS_1")
 	[ -n "$KEY_WORDS_2" ] && local KEY_MATCH_2=$(echo $remarks $server | grep -Eo "$KEY_WORDS_2")
 	if [ -n "$KEY_WORDS_1" -a -z "$KEY_WORDS_2" ]; then
 		if [ -n "$KEY_MATCH_1" ]; then
 			echo_date "SSR节点：不添加【$remarks】节点，因为匹配了[排除]关键词"
-			let exclude+=1 
+			let exclude+=1
 			local UPDATE_FLAG=2
 		else
 			local UPDATE_FLAG=0
@@ -547,7 +549,7 @@ update_ssr_nodes(){
 	elif [ -z "$KEY_WORDS_1" -a -n "$KEY_WORDS_2" ]; then
 		if [ -z "$KEY_MATCH_2" ]; then
 			echo_date "SSR节点：不添加【$remarks】节点，因为不匹配[包括]关键词"
-			let exclude+=1 
+			let exclude+=1
 			local UPDATE_FLAG=2
 		else
 			local UPDATE_FLAG=0
@@ -555,15 +557,15 @@ update_ssr_nodes(){
 	elif [ -n "$KEY_WORDS_1" -a -n "$KEY_WORDS_2" ]; then
 		if [ -n "$KEY_MATCH_1" -a -z "$KEY_MATCH_2" ]; then
 			echo_date "SSR节点：不添加【$remarks】节点，因为匹配了[排除+包括]关键词"
-			let exclude+=1 
+			let exclude+=1
 			local UPDATE_FLAG=2
 		elif [ -n "$KEY_MATCH_1" -a -n "$KEY_MATCH_2" ]; then
 			echo_date "SSR节点：不添加【$remarks】节点，因为匹配了[排除]关键词"
-			let exclude+=1 
+			let exclude+=1
 			local UPDATE_FLAG=2
 		elif  [ -z "$KEY_MATCH_1" -a -z "$KEY_MATCH_2" ]; then
 			echo_date "SSR节点：不添加【$remarks】节点，因为不匹配[包括]关键词"
-			let exclude+=1 
+			let exclude+=1
 			local UPDATE_FLAG=2
 		else
 			local UPDATE_FLAG=0
@@ -571,7 +573,7 @@ update_ssr_nodes(){
 	else
 		local UPDATE_FLAG=0
 	fi
-	
+
 	# ------------------------------- 节点添加/修改逻辑 -------------------------------
 	local isadded_server=$(cat /tmp/all_localservers.txt | grep $group_base64 | awk '{print $1}' | grep -wc $server_base64 | head -n1)
 	local isadded_remark=$(cat /tmp/all_localservers.txt | grep $group_base64 | awk '{print $3}' | grep -wc $remark_base64 | head -n1)
@@ -694,7 +696,7 @@ update_ssr_nodes(){
 			local local_protocol_param="$(eval echo \$ssconf_basic_rss_protocol_param_$index)"
 			local local_obfs="$(eval echo \$ssconf_basic_rss_obfs_$index)"
 			local local_obfsparam="$(eval echo \$ssconf_basic_rss_obfs_param_$index)"
-			
+
 			[ "$local_mode" != "$ssr_subscribe_mode" ] && dbus set ssconf_basic_mode_$index="$ssr_subscribe_mode" && INFO="${INFO}模式"
 			[ "$SKIPDB_FLAG" == "2" ] && [ "$local_remark" != "$remarks" ] && dbus set ssconf_basic_name_$index="$remarks" && INFO="${INFO}名称 "
 			[ "$SKIPDB_FLAG" == "1" ] && [ "$local_server" != "$server" ] && dbus set ssconf_basic_server_$index="$server" && INFO="${INFO}服务器地址 "
@@ -717,7 +719,7 @@ update_ssr_nodes(){
 				fi
 			}
 			[ "$ssr_subscribe_obfspara" == "2" ] && [ "$local_obfsparam" != "$ssr_subscribe_obfspara_val" ] && dbus set ssconf_basic_rss_obfs_param_$index="$ssr_subscribe_obfspara_val" && INFO="${INFO}混淆参数 "
-			
+
 			if [ -n "$INFO" ]; then
 				INFO=$(trim_string "$INFO")
 				echo_date "SSR节点：更新【$remarks】，原因：节点的【${INFO}】发生了更改！"
@@ -757,7 +759,7 @@ remove_node_gap(){
 	SEQ=$(export -p | grep "ssconf_basic" | grep _name_ | cut -d "_" -f 4 | cut -d "=" -f 1 | sort -n)
 	MAX=$(export -p | grep "ssconf_basic" | grep _name_ | cut -d "_" -f 4 | cut -d "=" -f 1 | sort -rn | head -n1)
 	NODES_NU=$(export -p | grep "ssconf_basic" | grep _name_ | wc -l)
-	
+
 	echo_date "最大节点序号：$MAX"
 	echo_date "共有节点数量：$NODES_NU"
 	if [ "$MAX" != "$NODES_NU" ]; then
@@ -782,7 +784,7 @@ remove_node_gap(){
 				fi
 				if [ -n "$ss_basic_udp_node" -a "$nu" == "$ss_basic_udp_node" ]; then
 					dbus set ss_basic_udp_node=${y}
-				fi				
+				fi
 			fi
 			let y+=1
 		done
@@ -800,7 +802,7 @@ gap_test(){
 	unset ssconf_basic_name_44
 	unset ssconf_basic_name_47
 	unset ssconf_basic_name_52
-	
+
 	SEQ=$(export -p | grep "ssconf_basic" | grep _name_ | cut -d "_" -f 4 | cut -d "=" -f 1 | sort -n)
 	SEQ_SUB=$(export -p | grep "ssconf_basic" | grep _group_ | cut -d "_" -f 4 | cut -d "=" -f 1 | sort -n)
 	MAX=$(export -p | grep "ssconf_basic" | grep _name_ | cut -d "_" -f 4 | cut -d "=" -f 1 | sort -rn | head -n1)
@@ -882,7 +884,7 @@ download_by_curl(){
 	fi
 
 	sleep 1
-	
+
 	echo_date "使用curl下载订阅失败，第二次尝试下载..."
 	curl -4sSk --connect-timeout 10 "$1" > /tmp/ssr_subscribe_file.txt
 	if [ "$?" == "0" ]; then
@@ -895,7 +897,7 @@ download_by_curl(){
 	curl -4sSk --connect-timeout 12 "$1" > /tmp/ssr_subscribe_file.txt
 	if [ "$?" == "0" ]; then
 		return 0
-	fi	
+	fi
 
 	return 1
 }
@@ -906,7 +908,7 @@ download_by_wget(){
 	else
 		local EXT_OPT=""
 	fi
-	
+
 	echo_date "使用wget下载订阅，第一次尝试下载..."
 	wget -4 -t 1 -T 10 --dns-timeout=5 -q $EXT_OPT "$1" -O /tmp/ssr_subscribe_file.txt
 	if [ "$?" == "0" ]; then
@@ -919,8 +921,8 @@ download_by_wget(){
 	wget -4 -t 1 -T 15 --dns-timeout=10 -q $EXT_OPT "$1" -O /tmp/ssr_subscribe_file.txt
 	if [ "$?" == "0" ]; then
 		return 0
-	fi	
-	
+	fi
+
 	sleep 2
 
 	echo_date "使用wget下载订阅，第三次尝试下载..."
@@ -968,7 +970,7 @@ get_online_rule_now(){
 
 	# 	fi
 	# fi
-	
+
 	if [ "${ss_basic_online_links_goss}" == "1" ]; then
 		if [ "$(get_fancyss_running_status)" == "1" ];then
 			echo_date "使用当前$(get_type_name $ss_basic_type)节点：[$(get_node_name)]提供的网络下载..."
@@ -981,7 +983,7 @@ get_online_rule_now(){
 		echo_date "使用常规网络下载..."
 		dnsmasq_rule remove
 	fi
-	
+
 	# 3. download by curl
 	download_by_curl "${SUB_LINK}"
 
@@ -995,7 +997,7 @@ get_online_rule_now(){
 			rm /tmp/ssr_subscribe_file.txt
 			download_by_wget "${SUB_LINK}"
 		fi
-		
+
 		#下载为空...
 		if [ -z "$(cat /tmp/ssr_subscribe_file.txt)" ]; then
 			echo_date "下载内容为空..."
@@ -1023,7 +1025,7 @@ get_online_rule_now(){
 			echo_date "下载内容为空..."
 			return 3
 		fi
-		
+
 		#产品信息错误
 		local wrong1=$(cat /tmp/ssr_subscribe_file.txt | grep "{")
 		local wrong2=$(cat /tmp/ssr_subscribe_file.txt | grep "<")
@@ -1123,7 +1125,7 @@ get_online_rule_now(){
 			echo_date "本次更新订阅来源 【$v2ray_group】， 新增节点 $addnum 个，修改 $updatenum 个，删除 $delnum 个；"
 			echo_date "现共有自添加节点：$USER_ADD 个。"
 			echo_date "现共有订阅SSR/v2ray节点：$ONLINE_GET 个。"
-			echo_date "在线订阅列表更新完成!"			
+			echo_date "在线订阅列表更新完成!"
 		else
 			return 3
 		fi
@@ -1178,8 +1180,8 @@ start_online_update(){
 		updatenum=0
 		delnum=0
 		exclude=0
-		
-		echo_date "开始更新在线订阅列表..." 
+
+		echo_date "开始更新在线订阅列表..."
 		get_online_rule_now "$url"
 		case $? in
 		0)
